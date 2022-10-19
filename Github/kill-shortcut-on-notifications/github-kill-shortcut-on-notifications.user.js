@@ -4,10 +4,10 @@
 // @icon        https://github.githubassets.com/favicons/favicon.svg
 // @match       https://github.com/notifications*
 // @grant       none
-// @version     0.1.0
+// @version     0.1.1
 // @author      y-saeki
 // @description Kill all keyboard shortcuts on Github Notification screen because of that causes critical effect by easy operational error.
-// @supportURL  
+// @supportURL  https://github.com/y-saeki/UserScript
 // ==/UserScript==
 
 const target = document.querySelectorAll('[data-hotkey]');
