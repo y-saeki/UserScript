@@ -4,8 +4,10 @@
 // @match       *://outlook.office.com/calendar/*
 // @icon        https://res-h3.public.cdn.office.net/assets/mail/pwa/v1/pngs/apple-touch-icon.png
 // @grant       none
+// @noframes    
 // @version     1.1
 // @author      y-saeki
+// @supportURL  https://github.com/y-saeki/UserScript
 // @description Automatically turn off the annoying "Email organizer" checkbox that appears every time you try to respond to an invitation.
 // ==/UserScript==
 

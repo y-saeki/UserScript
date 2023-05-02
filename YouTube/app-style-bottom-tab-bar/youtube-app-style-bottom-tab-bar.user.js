@@ -1,15 +1,15 @@
 // ==UserScript==
 // @name        YouTube App Style Bottom Tab Bar
 // @namespace   Violentmonkey Scripts
-// @icon        https://youtube.com/favicon.ico
+// @icon        https://www.youtube.com/s/desktop/fa273944/img/favicon_144x144.png
 // @match       *://www.youtube.com/*
 // @run-at      document-body
-// @noframes
+// @noframes    
 // @grant       none
 // @version     0.9.1
 // @author      y-saeki
-// @description Add YouTube smartphone app styled Bottom Tab Bar
 // @supportURL  https://github.com/y-saeki/UserScript
+// @description Add YouTube smartphone app styled Bottom Tab Bar
 // ==/UserScript==
 
 init();
