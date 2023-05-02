@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name        YouTube App Style Bottom Tab Bar
 // @namespace   Violentmonkey Scripts
-// @icon        https://youtube.com/favicon.ico
+// @icon        https://www.youtube.com/s/desktop/fa273944/img/favicon_144x144.png
 // @match       *://www.youtube.com/*
 // @run-at      document-body
 // @noframes    
