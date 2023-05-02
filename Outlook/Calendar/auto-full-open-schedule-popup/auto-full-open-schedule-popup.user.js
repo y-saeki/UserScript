@@ -4,6 +4,7 @@
 // @match       *://outlook.office.com/calendar/*
 // @icon        https://res-h3.public.cdn.office.net/assets/mail/pwa/v1/pngs/apple-touch-icon.png
 // @grant       none
+// @noframes    
 // @version     1.0
 // @author      y-saeki
 // @supportURL  https://github.com/y-saeki/UserScript

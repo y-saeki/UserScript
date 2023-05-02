@@ -4,7 +4,7 @@
 // @icon        https://youtube.com/favicon.ico
 // @match       *://www.youtube.com/*
 // @run-at      document-body
-// @noframes
+// @noframes    
 // @grant       none
 // @version     0.9.1
 // @author      y-saeki

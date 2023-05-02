@@ -4,6 +4,7 @@
 // @icon        https://github.githubassets.com/favicons/favicon.svg
 // @match       https://github.com/notifications*
 // @grant       none
+// @noframes    
 // @version     0.1.1
 // @author      y-saeki
 // @supportURL  https://github.com/y-saeki/UserScript
