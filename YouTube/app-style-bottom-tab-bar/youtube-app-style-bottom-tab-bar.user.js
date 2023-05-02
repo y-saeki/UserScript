@@ -8,8 +8,8 @@
 // @grant       none
 // @version     0.9.1
 // @author      y-saeki
-// @description Add YouTube smartphone app styled Bottom Tab Bar
 // @supportURL  https://github.com/y-saeki/UserScript
+// @description Add YouTube smartphone app styled Bottom Tab Bar
 // ==/UserScript==
 
 init();

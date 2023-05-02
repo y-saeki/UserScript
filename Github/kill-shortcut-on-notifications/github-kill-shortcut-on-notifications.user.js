@@ -6,8 +6,8 @@
 // @grant       none
 // @version     0.1.1
 // @author      y-saeki
-// @description Kill all keyboard shortcuts on Github Notification screen because of that causes critical effect by easy operational error.
 // @supportURL  https://github.com/y-saeki/UserScript
+// @description Kill all keyboard shortcuts on Github Notification screen because of that causes critical effect by easy operational error.
 // ==/UserScript==
 
 const target = document.querySelectorAll('[data-hotkey]');
