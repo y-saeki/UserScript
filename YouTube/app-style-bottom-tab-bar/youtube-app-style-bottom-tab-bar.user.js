@@ -3,6 +3,7 @@
 // @namespace   Violentmonkey Scripts
 // @icon        https://www.youtube.com/s/desktop/fa273944/img/favicon_144x144.png
 // @match       *://www.youtube.com/*
+// @exclude     *://www.youtube.com/live_chat*
 // @run-at      document-body
 // @noframes    
 // @grant       none
