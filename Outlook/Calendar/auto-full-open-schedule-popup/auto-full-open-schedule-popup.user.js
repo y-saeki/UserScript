@@ -2,10 +2,11 @@
 // @name        Outlook Calendar - Auto full-open schedule popup
 // @namespace   Violentmonkey Scripts
 // @match       *://outlook.office.com/calendar/*
+// @match       *://outlook.office365.com/calendar/*
 // @icon        https://res-h3.public.cdn.office.net/assets/mail/pwa/v1/pngs/apple-touch-icon.png
 // @grant       none
 // @noframes    
-// @version     1.0
+// @version     1.0.3
 // @author      y-saeki
 // @supportURL  https://github.com/y-saeki/UserScript
 // @description Cancel the unusable mini-popup that appears when you click on a schedule and force it to be displayed in full-size modal.
