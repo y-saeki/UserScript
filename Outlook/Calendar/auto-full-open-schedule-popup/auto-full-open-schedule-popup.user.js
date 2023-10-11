@@ -5,8 +5,8 @@
 // @match       *://outlook.office365.com/calendar/*
 // @icon        https://res-h3.public.cdn.office.net/assets/mail/pwa/v1/pngs/apple-touch-icon.png
 // @grant       none
-// @noframes    
-// @version     1.0.3
+// @noframes
+// @version     1.0.4
 // @author      y-saeki
 // @supportURL  https://github.com/y-saeki/UserScript
 // @description Cancel the unusable mini-popup that appears when you click on a schedule and force it to be displayed in full-size modal.
@@ -17,10 +17,12 @@
 const config = {
   targetMutate        : '#fluent-default-layer-host',
   targetFullOpenTitle : {
-    ja: 'イベントを表示します',
-    en: 'View event'
-  }
+    ja                : 'イベントを表示します',
+    en                : 'View event'
+  },
+  modalHeight         : '900px'
 };
+
 
 // 指定された要素を探す処理
 function findFullOpenButtonByLabel(title) {
@@ -59,6 +61,20 @@ function waitForElement(selector) {
     checkForElement();
   });
 }
+
+
+(() => {
+  const html = `
+    <style>
+      /*   tweak modal size   */
+      .ms-Dialog-main {
+        height: ${config.modalHeight};
+      }
+    </style>
+    `
+  const element = document.body;
+  element.insertAdjacentHTML('beforeend', html);
+})();
 
 (async function() {
 
