@@ -6,7 +6,7 @@
 // @icon        https://res-h3.public.cdn.office.net/assets/mail/pwa/v1/pngs/apple-touch-icon.png
 // @grant       none
 // @noframes
-// @version     1.0.5
+// @version     1.0.7
 // @author      y-saeki
 // @supportURL  https://github.com/y-saeki/UserScript
 // @description Cancel the unusable mini-popup that appears when you click on a schedule and force it to be displayed in full-size modal.
@@ -67,12 +67,17 @@ function waitForElement(selector) {
   const html = `
     <style>
       /*   tweak modal size   */
-      .ms-Dialog-main {
+      div.ms-Modal-scrollableContent,
+      div.ms-Modal-scrollableContent > div,
+      div[data-app-section="ReadingPane"] {
         height: ${config.modalHeight};
-        overflow: scroll;
+      }
+      /*   fix member pane scrollbar bug  */
+      .XamP2 {
+        padding-bottom: 10px;
       }
     </style>
-    `
+  `;
   const element = document.body;
   element.insertAdjacentHTML('beforeend', html);
 })();
