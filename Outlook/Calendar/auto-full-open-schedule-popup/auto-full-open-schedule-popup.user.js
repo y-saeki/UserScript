@@ -69,6 +69,7 @@ function waitForElement(selector) {
       /*   tweak modal size   */
       .ms-Dialog-main {
         height: ${config.modalHeight};
+        overflow: scroll;
       }
     </style>
     `
