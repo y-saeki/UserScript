@@ -77,7 +77,7 @@ function waitForElement(selector) {
         padding-bottom: 10px;
       }
     </style>
-  `
+  `;
   const element = document.body;
   element.insertAdjacentHTML('beforeend', html);
 })();
