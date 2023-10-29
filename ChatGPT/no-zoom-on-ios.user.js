@@ -5,28 +5,38 @@
 // @match       https://chat.openai.com/*
 // @grant       none
 // @noframes
-// @version     0.1.1
+// @version     0.1.2
 // @author      y-saeki
 // @supportURL  https://github.com/y-saeki/UserScript
 // @description disable input form auto-zoom function on iOS
 // ==/UserScript==
 
-const viewportMeta = document.querySelector('meta[name="viewport"]');
-if (viewportMeta) {
-    const content = viewportMeta.getAttribute("content");
-    if (content) {
-        if (!content.includes("user-scalable=no")) {
-            viewportMeta.setAttribute(
-                "content",
-                content + ", user-scalable=no"
-            );
+check();
+
+// Observe Screen Transition
+const observeTarget = document.querySelector('head');
+const observer = new MutationObserver(check);
+observer.observe(observeTarget, { childList: true });
+
+// Runs everytime when mutated
+function check() {
+    const viewportMeta = document.querySelector('meta[name="viewport"]');
+    if (viewportMeta) {
+        const content = viewportMeta.getAttribute("content");
+        if (content) {
+            if (!content.includes("user-scalable=no")) {
+                viewportMeta.setAttribute(
+                    "content",
+                    content + ", user-scalable=no"
+                );
+            }
+        } else {
+            viewportMeta.setAttribute("content", "user-scalable=no");
         }
     } else {
-        viewportMeta.setAttribute("content", "user-scalable=no");
+        const newViewportMeta = document.createElement("meta");
+        newViewportMeta.name = "viewport";
+        newViewportMeta.content = "user-scalable=no";
+        document.getElementsByTagName("head")[0].appendChild(newViewportMeta);
     }
-} else {
-    const newViewportMeta = document.createElement("meta");
-    newViewportMeta.name = "viewport";
-    newViewportMeta.content = "user-scalable=no";
-    document.getElementsByTagName("head")[0].appendChild(newViewportMeta);
 }
