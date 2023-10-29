@@ -8,7 +8,7 @@
 // @version     0.1
 // @author      y-saeki
 // @supportURL  https://github.com/y-saeki/UserScript
-// @description No Zoom on iOS
+// @description disable input form auto-zoom function on iOS
 // ==/UserScript==
 
 const viewportMeta = document.querySelector('meta[name="viewport"]');
