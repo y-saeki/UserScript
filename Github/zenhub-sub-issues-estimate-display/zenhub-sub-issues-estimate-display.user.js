@@ -1,8 +1,10 @@
 // ==UserScript==
 // @name         Zenhub Sub-issues Estimate Display
 // @namespace    https://github.com/
+// @icon         https://github.githubassets.com/favicons/favicon.svg
 // @version      2.4.2
 // @description  GitHubのissueページでSub-issuesのZenhub estimateを表示
+// @supportURL   https://github.com/y-saeki/UserScript
 // @author       y-saeki w/ Cursor
 // @match        https://github.com/*/*/issues/*
 // @grant        GM_xmlhttpRequest
