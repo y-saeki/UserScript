@@ -2,14 +2,13 @@
 
 ## 概要
 
-GitHubのissueページで、Sub-issuesのZenhub estimateを表示するUserScriptです。
+GitHubのissueページで、Sub-issuesのZenhub estimateを表示するUserScriptです。  
 直下の子issueと、アコーディオン展開時に表示される孫issueのestimateを自動的に取得・表示します。
 
 ## 動作環境
 
 - **対象URL**: `https://github.com/*/*/issues/*`
 - **実行環境**: Tampermonkey等のUserScriptマネージャー
-- **依存ライブラリ**: jQuery 3.6.0
 
 ## 主要機能
 
@@ -58,7 +57,7 @@ GitHubのissueページで、Sub-issuesのZenhub estimateを表示するUserScri
 - **色**: 
   - 通常: 青（#4660f9）
   - Epic: グレー（#dfe4e9、grayscaleフィルタ適用）
-- **位置**: issueリンクの直後
+- **位置**: issueリンクの先頭
 - **フォント**: 12px、tabular-nums（等幅数字）
 - **ツールチップ**: 
   - 通常: `Zenhub Estimate: {値}`
@@ -158,7 +157,6 @@ window.resetZenhubApiKey()
 
 ## 依存関係
 
-- **jQuery**: 3.6.0（CDN経由）
 - **Tampermonkey API**: 
   - `GM_xmlhttpRequest`
   - `GM_getValue`
