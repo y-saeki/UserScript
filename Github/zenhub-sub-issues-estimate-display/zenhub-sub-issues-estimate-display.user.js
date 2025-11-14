@@ -7,6 +7,7 @@
 // @supportURL   https://github.com/y-saeki/UserScript
 // @author       y-saeki w/ Cursor
 // @match        https://github.com/*/*/issues/*
+// @noframes
 // @grant        GM_xmlhttpRequest
 // @grant        GM_getValue
 // @grant        GM_setValue
