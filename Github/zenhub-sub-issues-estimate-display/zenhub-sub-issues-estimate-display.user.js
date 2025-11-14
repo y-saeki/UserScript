@@ -2,7 +2,7 @@
 // @name         Zenhub Sub-issues Estimate Display
 // @namespace    https://github.com/
 // @icon         https://github.githubassets.com/favicons/favicon.svg
-// @version      2.4.2
+// @version      2.4.3
 // @description  GitHubのissueページでSub-issuesのZenhub estimateを表示
 // @supportURL   https://github.com/y-saeki/UserScript
 // @author       y-saeki w/ Cursor
@@ -12,6 +12,8 @@
 // @grant        GM_getValue
 // @grant        GM_setValue
 // @connect      api.zenhub.com
+// @updateURL    https://github.com/y-saeki/UserScript/raw/main/zenhub-sub-issues-estimate-display.user.js
+// @downloadURL  https://github.com/y-saeki/UserScript/raw/main/zenhub-sub-issues-estimate-display.user.js
 // ==/UserScript==
 
 (function() {
