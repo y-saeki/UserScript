@@ -6,19 +6,21 @@
 // @run-at      document-start
 // @grant       none
 // @noframes
-// @version     0.1.2
+// @version     0.2.0
 // @author      y-saeki w/ AI Agent
 // @supportURL  https://github.com/y-saeki/UserScript
-// @description Insert spaces by Tab key and remove them by Shift+Tab on Github textarea, instead of moving focus.
+// @description Indent lines by Tab key and unindent them by Shift+Tab on Github textarea, using spaces instead of moving focus.
 // ==/UserScript==
 
-// The event plumbing follows Refined Github's tab-to-indent feature and the
-// libraries behind it (fregante's indent-textarea and text-field-edit), which
-// are known to work on the current Github:
+// The event plumbing and the selection handling follow Refined Github's
+// tab-to-indent feature and the libraries behind it (fregante's indent-textarea
+// and text-field-edit), which are known to work on the current Github:
 //   https://github.com/refined-github/refined-github/blob/main/source/features/tab-to-indent.tsx
+//   https://github.com/fregante/indent-textarea
 //   https://github.com/fregante/text-field-edit
-// The indentation itself is spaces instead of a tab character, which is the
-// only reason this script exists rather than using Refined Github.
+// This script indents with spaces rather than a tab character, which is the only
+// reason it exists rather than using Refined Github. It also indents the whole
+// line instead of inserting at the cursor, so that Tab always means "indent".
 
 (function() {
   'use strict';
@@ -26,6 +28,11 @@
   // Tab size can be adjusted here (2, 4, etc.)
   const tabSize = 4;
   const spaces = ' '.repeat(tabSize);
+
+  // One level of indentation: either the spaces this script inserts, or a tab
+  // character someone else left behind
+  const indentation = new RegExp('^( {1,' + tabSize + '}|\t)');
+  const lineIndentation = new RegExp('(^|\n)( {1,' + tabSize + '}|\t)', 'g');
 
   // Pages that hold a Markdown editor. This is checked on every keystroke
   // instead of relying on @match alone: Github moves between pages without a
@@ -62,7 +69,7 @@
   // history intact and fires the input event that React listens to: assigning to
   // field.value leaves React's state untouched and the edit is reverted on the
   // next render.
-  function editField(field, start, end, text, caret) {
+  function editField(field, start, end, text) {
     const before = field.value;
 
     withFocus(field, function() {
@@ -89,9 +96,63 @@
         data: text === '' ? null : text
       }));
     }
+  }
 
-    const position = typeof caret === 'number' ? caret : start + text.length;
-    field.setSelectionRange(position, position);
+  function lineStartBefore(value, position) {
+    return value.lastIndexOf('\n', position - 1) + 1;
+  }
+
+  // Make sure the indentation of the last touched line is inside the range to
+  // replace, even when the selection ends before it
+  function findLineEnd(value, selectionEnd) {
+    const lastLineStart = lineStartBefore(value, selectionEnd);
+    const match = indentation.exec(value.substring(lastLineStart));
+    if (!match) {
+      return selectionEnd;
+    }
+
+    return Math.max(selectionEnd, lastLineStart + match[0].length);
+  }
+
+  function indentSelection(field) {
+    const start = field.selectionStart;
+    const end = field.selectionEnd;
+    const value = field.value;
+    const firstLineStart = lineStartBefore(value, start);
+
+    // The last line is indented only when the selection reaches past its line
+    // break, hence the end of the range is one character before the selection
+    const rangeEnd = Math.max(firstLineStart, end - 1);
+    const text = value.substring(firstLineStart, rangeEnd);
+    const indented = text.replace(/^|\n/g, '$&' + spaces);
+    const added = indented.length - text.length;
+
+    editField(field, firstLineStart, rangeEnd, indented);
+    field.setSelectionRange(start + tabSize, end + added);
+  }
+
+  function unindentSelection(field) {
+    const start = field.selectionStart;
+    const end = field.selectionEnd;
+    const value = field.value;
+    const firstLineStart = lineStartBefore(value, start);
+    const rangeEnd = findLineEnd(value, end);
+
+    const text = value.substring(firstLineStart, rangeEnd);
+    const unindented = text.replace(lineIndentation, '$1');
+    const removed = text.length - unindented.length;
+    if (removed === 0) {
+      return;
+    }
+
+    editField(field, firstLineStart, rangeEnd, unindented);
+
+    // Keep the cursor where it was relative to the text, without letting it
+    // escape the line when it sat inside the indentation
+    const firstLineMatch = indentation.exec(value.substring(firstLineStart));
+    const firstLineRemoved = firstLineMatch ? firstLineMatch[0].length : 0;
+    const newStart = start - Math.min(firstLineRemoved, start - firstLineStart);
+    field.setSelectionRange(newStart, Math.max(newStart, end - removed));
   }
 
   // Skip while the user is in the middle of something: during an IME conversion,
@@ -119,15 +180,7 @@
       return;
     }
 
-    const start = field.selectionStart;
-    const end = field.selectionEnd;
-    if (start === null || end === null) {
-      return;
-    }
-
-    // Check if any text is selected
-    if (start !== end) {
-      // Do not indent when text is selected because github-native indent feature is available.
+    if (field.selectionStart === null || field.selectionEnd === null) {
       return;
     }
 
@@ -136,26 +189,11 @@
     event.preventDefault();
     event.stopImmediatePropagation();
 
-    // Shift + Tab
     if (event.shiftKey) {
-      const value = field.value;
-
-      // Case 1: Spaces are directly before the cursor
-      if (value.substring(start - tabSize, start) === spaces) {
-        editField(field, start - tabSize, start, '');
-        return;
-      }
-
-      // Case 2: Spaces are at the start of the current line
-      const lineStart = value.lastIndexOf('\n', start - 1) + 1;
-      if (value.substring(lineStart, lineStart + tabSize) === spaces) {
-        editField(field, lineStart, lineStart + tabSize, '', Math.max(lineStart, start - tabSize));
-      }
-      return;
+      unindentSelection(field);
+    } else {
+      indentSelection(field);
     }
-
-    // Regular Tab
-    editField(field, start, end, spaces);
   }
 
   // Listen on window in the capture phase. The capture phase starts here, so
@@ -164,5 +202,5 @@
   window.addEventListener('keydown', onKeydown, true);
 
   // Lets you confirm from the devtools console which version is actually running
-  window.tabIndentOnGithubTextarea = { version: '0.1.2' };
+  window.tabIndentOnGithubTextarea = { version: '0.2.0' };
 })();
