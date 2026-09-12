@@ -114,12 +114,6 @@ current official documentation, not by recalling it. Versions move, and a habit 
 correct a few releases ago may no longer be. When a specific version is pinned, check that
 version's documentation.
 
-## Each application carries a README
-
-Every application directory has a `README.md` covering what the application does, how to
-set it up, and how to run it. Write it as the entry point for someone who has just opened
-the directory and knows nothing about it.
-
 ## Write issues and pull requests in Japanese
 
 GitHub issues and pull requests — titles and bodies alike — are written in Japanese.
