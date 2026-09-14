@@ -43,6 +43,34 @@ window.tabIndentOnGithubTextarea
 
 `undefined` が返る場合、そのページでスクリプトが読み込まれていません。UserScriptマネージャ側のインストール状況を確認してください。
 
+読み込まれているのにTabが効かない場合は、対象のフォームで一度Tabを押してから、以下で直前のキー入力の処理結果を確認できます。
+
+```js
+window.tabIndentOnGithubTextarea.lastEvent
+```
+
+| フィールド | 内容 |
+| --- | --- |
+| `handled` | スクリプトがTabを処理したか |
+| `skipped` | 処理しなかった理由（下表） |
+| `field` | 対象要素の情報（タグ名・class・`aria-expanded` など） |
+| `edit` | 編集方法（`execCommand` / `valueSetter` / `failed`） |
+| `afterRender` | 編集がその後も維持されたか（`kept` / `reverted`） |
+
+`skipped` の値は以下のいずれかです。
+
+| 値 | 意味 |
+| --- | --- |
+| `notATextarea` | 入力欄がtextareaではない（リッチテキストエディタなど） |
+| `fieldNotEditable` | textareaがreadonly / disabled |
+| `pathNotMatched` | 対象外の画面（下記「有効になる画面」を参照） |
+| `composing` | IME変換中 |
+| `suggester` | 補完候補（旧形式のドロップダウン）が開いている |
+| `autocomplete` | 補完候補（Primer形式のlistbox）が開いている |
+| `noSelectionRange` | カーソル位置を取得できない |
+
+`window.tabIndentOnGithubTextarea.debug = true` を設定すると、以降のTab入力について同じ内容がconsoleに出力されます。
+
 ## 実装メモ
 
 キーイベントの取り回しと選択範囲の処理は、[Refined Github の tab-to-indent](https://github.com/refined-github/refined-github/blob/main/source/features/tab-to-indent.tsx) と、その依存である [indent-textarea](https://github.com/fregante/indent-textarea) / [text-field-edit](https://github.com/fregante/text-field-edit) の実装に倣っています。
@@ -52,6 +80,10 @@ window.tabIndentOnGithubTextarea
     - undo履歴と `input` イベントも維持される
 - キーイベントは `window` のcaptureフェーズで受け、処理した場合は `stopImmediatePropagation()` する
     - Github側がTabを先に処理してフォーカスを移動するため
+    - 他のリスナーが先にTabを処理済み（`defaultPrevented`）でも、エディタ内では常にインデントを優先する
+- 補完候補が開いているかどうかは、属性の有無ではなく実際に表示されている候補リストの有無で判定する
+    - `aria-expanded` を常に `true` のままにするエディタがあり、属性だけを見ると全てのTabを無視してしまう
+- textareaはShadow DOM内にある場合も `composedPath()` から探索し、フォーカスは奪ったまま編集する
 
 Refined Githubとの差異は以下の2点です。
 
